@@ -1,0 +1,33 @@
+package com.laioffer.twitch.hello;
+
+
+import net.datafaker.Faker;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Locale;
+
+@RestController
+public class HelloController { // controller class就是接受前段请求的
+
+
+    @GetMapping("/hello") //网址后面跟的， spring boot就会找到哪个function有这个字，就会call这个function，做路径的mapping
+    public Person sayHello(@RequestParam(required = false) String locale) {
+        if (locale == null) {
+            locale = "en_US";
+        }
+        Faker faker = new Faker(new Locale(locale));
+        String name = faker.name().fullName();
+        String company = faker.company().name();
+        String street = faker.address().streetAddress();
+        String city = faker.address().city();
+        String state = faker.address().state();
+        String bookTitle = faker.book().title();
+        String bookAuthor = faker.book().author();
+
+
+        return new Person(name, company, new Address(street, city, state, null), new Book(bookTitle, bookAuthor));
+    }
+
+}
